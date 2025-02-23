@@ -13,3 +13,6 @@ To prevent this, you should use Helmet’s frameguard middleware to set the X-Fr
 
 in lesson 4 we learn about get protect form Cross-Site Scripting (XSS) is an attack where malicious scripts are injected into web pages to steal user data, such as session cookies or passwords. To reduce the risk of XSS attacks, sanitizing user input and using security headers is crucial.
 to enable this we can use app.use(helmet.xssFilter()); but this is an old method and can use better methods.
+
+in lesson 5 we learn about MIME sniffing is a technique browsers use to guess the content type of a response, even if the Content-Type header is set. This behavior can lead to security vulnerabilities, To prevent this, use helmet.noSniff() to set the X-Content-Type-Options: nosniff header.
+

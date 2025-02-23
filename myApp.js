@@ -11,6 +11,9 @@ app.use(helmet.frameguard({ action: 'deny' }));
 // Enable deprecated XSS filter
 app.use(helmet.xssFilter());
 
+// Prevent MIME sniffing attacks
+app.use(helmet.noSniff());
+
 module.exports = app;
 const api = require('./server.js');
 app.use(express.static('public'));
