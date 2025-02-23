@@ -8,6 +8,9 @@ app.use(helmet.hidePoweredBy());
 // Use Helmet to prevent clickjacking attacks
 app.use(helmet.frameguard({ action: 'deny' }));
 
+// Enable deprecated XSS filter
+app.use(helmet.xssFilter());
+
 module.exports = app;
 const api = require('./server.js');
 app.use(express.static('public'));

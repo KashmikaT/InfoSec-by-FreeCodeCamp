@@ -11,3 +11,5 @@ in lesson 2 we learn to hide the info to save the app from potential threts for 
 in lesson 3 we learn to get protect from clickjacking attacks where a malicious site can embed your webpage inside an <iframe> without your consent. This could trick users into interacting with your site in unintended ways (e.g., clicking hidden buttons that execute harmful actions)
 To prevent this, you should use Helmet’s frameguard middleware to set the X-Frame-Options HTTP header. This tells browsers not to allow your site to be embedded in an <iframe>, thereby preventing clickjacking attacks.
 
+in lesson 4 we learn about get protect form Cross-Site Scripting (XSS) is an attack where malicious scripts are injected into web pages to steal user data, such as session cookies or passwords. To reduce the risk of XSS attacks, sanitizing user input and using security headers is crucial.
+to enable this we can use app.use(helmet.xssFilter()); but this is an old method and can use better methods.
