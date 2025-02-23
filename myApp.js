@@ -5,6 +5,9 @@ const app = express();
 // Use Helmet to hide the X-Powered-By header
 app.use(helmet.hidePoweredBy());
 
+// Use Helmet to prevent clickjacking attacks
+app.use(helmet.frameguard({ action: 'deny' }));
+
 module.exports = app;
 const api = require('./server.js');
 app.use(express.static('public'));
