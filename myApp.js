@@ -14,6 +14,9 @@ app.use(helmet.xssFilter());
 // Prevent MIME sniffing attacks
 app.use(helmet.noSniff());
 
+// Prevent Internet Explorer from executing downloaded files in the site's context
+app.use(helmet.ieNoOpen());
+
 module.exports = app;
 const api = require('./server.js');
 app.use(express.static('public'));
