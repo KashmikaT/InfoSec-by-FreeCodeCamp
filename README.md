@@ -18,4 +18,8 @@ in lesson 5 we learn about MIME sniffing is a technique browsers use to guess th
 
 in lesson 6 we learn about Older versions of Internet Explorer (IE) allow downloaded HTML files to execute JavaScript in the context of your site, to prevent these use app.use(helmet.ieNoOpen());
 
-in lesson 7 we learning to convert http sites to https If your website supports HTTPS, users may still access it via insecure HTTP. Attackers can exploit this to perform protocol downgrade attacks or cookie hijacking, 
+in lesson 7 we learning to convert http sites to https If your website supports HTTPS, users may still access it via insecure HTTP. Attackers can exploit this to perform protocol downgrade attacks or cookie hijacking
+
+Browsers pre-resolve domain names for links in a page before the user clicks them. While this improves performance, it can lead to:
+
+Increased DNS queries, causing unnecessary network load. Privacy risks, as eavesdroppers can infer visited pages. Incorrect analytics, since some links appear "visited" when they are not. Solution: Use helmet.dnsPrefetchControl() to disable DNS prefetching and prevent leaking browsing behavior.
