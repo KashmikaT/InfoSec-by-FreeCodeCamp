@@ -23,3 +23,5 @@ in lesson 7 we learning to convert http sites to https If your website supports 
 Browsers pre-resolve domain names for links in a page before the user clicks them. While this improves performance, it can lead to:
 
 Increased DNS queries, causing unnecessary network load. Privacy risks, as eavesdroppers can infer visited pages. Incorrect analytics, since some links appear "visited" when they are not. Solution: Use helmet.dnsPrefetchControl() to disable DNS prefetching and prevent leaking browsing behavior.
+
+By default, browsers cache web pages, which can cause users to see outdated versions of your website even after an updatUse helmet.noCache() to disable client-side caching.
