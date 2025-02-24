@@ -17,6 +17,17 @@ app.use(helmet.noSniff());
 // Prevent Internet Explorer from executing downloaded files in the site's context
 app.use(helmet.ieNoOpen());
 
+// Define HSTS max age (90 days)
+const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
+
+// Enable HSTS and force HTTPS
+app.use(
+  helmet.hsts({
+    maxAge: ninetyDaysInSeconds,
+    force: true, // Override existing HSTS headers (required in Gitpod)
+  })
+);
+
 module.exports = app;
 const api = require('./server.js');
 app.use(express.static('public'));

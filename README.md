@@ -16,4 +16,6 @@ to enable this we can use app.use(helmet.xssFilter()); but this is an old method
 
 in lesson 5 we learn about MIME sniffing is a technique browsers use to guess the content type of a response, even if the Content-Type header is set. This behavior can lead to security vulnerabilities, To prevent this, use helmet.noSniff() to set the X-Content-Type-Options: nosniff header.
 
-i leson 6 we learn about Older versions of Internet Explorer (IE) allow downloaded HTML files to execute JavaScript in the context of your site, to prevent these use app.use(helmet.ieNoOpen());
+in lesson 6 we learn about Older versions of Internet Explorer (IE) allow downloaded HTML files to execute JavaScript in the context of your site, to prevent these use app.use(helmet.ieNoOpen());
+
+in lesson 7 we learning to convert http sites to https If your website supports HTTPS, users may still access it via insecure HTTP. Attackers can exploit this to perform protocol downgrade attacks or cookie hijacking, 
