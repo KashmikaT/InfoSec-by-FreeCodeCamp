@@ -1,66 +1,68 @@
 const express = require('express');
+const bcrypt = require('bcrypt'); // Require bcrypt for hashing
 const helmet = require('helmet'); // Import helmet
 const app = express();
 
-// Use Helmet to hide the X-Powered-By header
-app.use(helmet.hidePoweredBy());
+// Middleware for parsing JSON data (needed for POST requests with JSON bodies)
+app.use(express.json());
 
-// Use Helmet to prevent clickjacking attacks
-app.use(helmet.frameguard({ action: 'deny' }));
+// Use Helmet to set security headers
+app.use(helmet());
 
-// Enable deprecated XSS filter (can be updated later, but included for now)
-app.use(helmet.xssFilter());
+// Simulate a user database (in a real application, use a database)
+let users = []; // This will store user objects with hashed passwords
 
-// Prevent MIME sniffing attacks
-app.use(helmet.noSniff());
+// Function to register a new user (hashing the password with bcrypt)
+app.post('/register', async (req, res) => {
+  const { username, password } = req.body;
 
-// Prevent Internet Explorer from executing downloaded files in the site's context
-app.use(helmet.ieNoOpen());
+  // Check if username is already taken
+  const existingUser = users.find(user => user.username === username);
+  if (existingUser) {
+    return res.status(400).send('Username is already taken');
+  }
 
-// Define HSTS max age (90 days)
-const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
-
-// Enable HSTS and force HTTPS (make sure this is set to true for secure connections)
-app.use(
-  helmet.hsts({
-    maxAge: ninetyDaysInSeconds,
-    force: true, // Force HTTPS
-  })
-);
-
-// Disable DNS prefetching
-app.use(helmet.dnsPrefetchControl({ allow: false }));
-
-// Disable browser caching
-app.use(helmet.noCache());
-
-// Set Content Security Policy (CSP) with helmet
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"], // Trust only the same origin for all resources by default
-      scriptSrc: ["'self'", "trusted-cdn.com"], // Allow scripts from the same origin and from trusted-cdn.com
-    },
-  })
-);
-
-// Serve static files from 'public' folder
-app.use(express.static('public'));
-
-// Set up routes
-const api = require('./server.js');
-app.use('/_api', api);
-
-// Home route
-app.get("/", function (request, response) {
-  response.sendFile(__dirname + '/views/index.html');
+  // Generate salt and hash the password with bcrypt
+  const saltRounds = 12; // The cost factor
+  try {
+    const hashedPassword = await bcrypt.hash(password, saltRounds); // Hash the password with salt
+    users.push({ username, password: hashedPassword }); // Store the user with the hashed password
+    res.status(200).send('User registered successfully');
+  } catch (error) {
+    res.status(500).send('Error hashing password');
+  }
 });
 
-// Remove strict-transport-security disable line
-// app.disable('strict-transport-security'); // No need to disable HSTS as it's already configured correctly
+// Function to login and verify the user's password
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
 
-// Set up the port for the server
-let port = process.env.PORT || 3000;
+  // Find the user by username
+  const user = users.find(user => user.username === username);
+  if (!user) {
+    return res.status(400).send('Invalid username or password');
+  }
+
+  // Compare the entered password with the stored hashed password using bcrypt
+  try {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (isMatch) {
+      res.status(200).send('Login successful');
+    } else {
+      res.status(400).send('Invalid username or password');
+    }
+  } catch (error) {
+    res.status(500).send('Error comparing passwords');
+  }
+});
+
+// Home route
+app.get("/", function (req, res) {
+  res.send('Welcome to the secured app!');
+});
+
+// Set the port and start the server
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`FreeCodeCamp IS project listening on port ${port}`);
+  console.log(`App is running on port ${port}`);
 });
