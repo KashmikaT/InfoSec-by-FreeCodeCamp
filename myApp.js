@@ -8,7 +8,7 @@ app.use(helmet.hidePoweredBy());
 // Use Helmet to prevent clickjacking attacks
 app.use(helmet.frameguard({ action: 'deny' }));
 
-// Enable deprecated XSS filter
+// Enable deprecated XSS filter (can be updated later, but included for now)
 app.use(helmet.xssFilter());
 
 // Prevent MIME sniffing attacks
@@ -20,11 +20,11 @@ app.use(helmet.ieNoOpen());
 // Define HSTS max age (90 days)
 const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
 
-// Enable HSTS and force HTTPS
+// Enable HSTS and force HTTPS (make sure this is set to true for secure connections)
 app.use(
   helmet.hsts({
     maxAge: ninetyDaysInSeconds,
-    force: true, // Override existing HSTS headers (required in Gitpod)
+    force: true, // Force HTTPS
   })
 );
 
@@ -34,7 +34,7 @@ app.use(helmet.dnsPrefetchControl({ allow: false }));
 // Disable browser caching
 app.use(helmet.noCache());
 
-// Set Content Security Policy with helmet
+// Set Content Security Policy (CSP) with helmet
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -44,15 +44,22 @@ app.use(
   })
 );
 
-module.exports = app;
-const api = require('./server.js');
+// Serve static files from 'public' folder
 app.use(express.static('public'));
 
-app.disable('strict-transport-security');
+// Set up routes
+const api = require('./server.js');
 app.use('/_api', api);
+
+// Home route
 app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
+
+// Remove strict-transport-security disable line
+// app.disable('strict-transport-security'); // No need to disable HSTS as it's already configured correctly
+
+// Set up the port for the server
 let port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`FreeCodeCamp IS project listening on port ${port}`);
