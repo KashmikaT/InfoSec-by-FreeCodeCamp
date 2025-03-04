@@ -34,6 +34,16 @@ app.use(helmet.dnsPrefetchControl({ allow: false }));
 // Disable browser caching
 app.use(helmet.noCache());
 
+// Set Content Security Policy with helmet
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"], // Trust only the same origin for all resources by default
+      scriptSrc: ["'self'", "trusted-cdn.com"], // Allow scripts from the same origin and from trusted-cdn.com
+    },
+  })
+);
+
 module.exports = app;
 const api = require('./server.js');
 app.use(express.static('public'));

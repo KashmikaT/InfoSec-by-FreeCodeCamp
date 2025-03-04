@@ -25,3 +25,5 @@ Browsers pre-resolve domain names for links in a page before the user clicks the
 Increased DNS queries, causing unnecessary network load. Privacy risks, as eavesdroppers can infer visited pages. Incorrect analytics, since some links appear "visited" when they are not. Solution: Use helmet.dnsPrefetchControl() to disable DNS prefetching and prevent leaking browsing behavior.
 
 By default, browsers cache web pages, which can cause users to see outdated versions of your website even after an updatUse helmet.noCache() to disable client-side caching.
+
+ Content Security Policy (CSP) is a security feature used to mitigate a variety of attacks on web applications, such as Cross-Site Scripting (XSS), clickjacking,
